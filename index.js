@@ -151,7 +151,7 @@ const rules = {
 		html: function(node, output, state) {
 			return (
 				'[spoiler: '
-					+ htmlTag('span', output(node.content, state), { class: 'd-spoiler data-mx-spoiler', style: 'color: #202228' }, state)
+					+ htmlTag('span', output(node.content, state), { class: 'd-spoiler', 'data-mx-spoiler': '', style: 'color: #202228' }, state)
 					+ ']'
 			)
 		}
