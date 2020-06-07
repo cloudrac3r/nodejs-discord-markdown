@@ -149,7 +149,11 @@ const rules = {
 			};
 		},
 		html: function(node, output, state) {
-			return htmlTag('span', output(node.content, state), { class: 'd-spoiler' }, state);
+			return (
+				'[spoiler: '
+					+ htmlTag('span', output(node.content, state), { class: 'd-spoiler data-mx-spoiler', style: 'color: #202228' }, state)
+					+ ']'
+			)
 		}
 	}
 };
