@@ -16,7 +16,7 @@ function htmlTag(tagName, content, attributes, isClosed = true, state = { }) {
 	let attributeString = '';
 	for (let attr in attributes) {
 		// Removes falsy attributes
-		if (Object.prototype.hasOwnProperty.call(attributes, attr) && attributes[attr])
+		if (Object.prototype.hasOwnProperty.call(attributes, attr))
 			attributeString += ` ${markdown.sanitizeText(attr)}="${markdown.sanitizeText(attributes[attr])}"`;
 	}
 
