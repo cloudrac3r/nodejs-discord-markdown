@@ -52,9 +52,9 @@ test('Spoiler edge-cases', () => {
 	expect(markdown.toHTML('||||'))
 		.toBe('||||');
 	expect(markdown.toHTML('|| ||'))
-		.toBe('<span class="d-spoiler"> </span>');
+		.toBe('<span class="d-spoiler" data-mx-spoiler=""> </span>');
 	expect(markdown.toHTML('||||||'))
-		.toBe('<span class="d-spoiler">|</span>|');
+		.toBe('<span class="d-spoiler" data-mx-spoiler="">|</span>|');
 });
 
 test('Nested <em>', () => {
