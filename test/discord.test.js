@@ -71,7 +71,7 @@ test('don\'t parse stuff in code blocks', () => {
 
 test('animated emojis work', () => {
 	expect(markdown.toHTML('heh <a:blah:1234>', ))
-		.toBe('heh <img class="d-emoji d-emoji-animated" src="https://cdn.discordapp.com/emojis/1234.png" alt=":blah:">');
+		.toBe('heh <img class="d-emoji d-emoji-animated" src="https://cdn.discordapp.com/emojis/1234.gif" alt=":blah:">');
 });
 
 test('with discord-only don\'t parse normal stuff', () => {
