@@ -21,7 +21,7 @@
 		"lint": "eslint ."
 	},
 	"dependencies": {
-		"highlight.js": "^9.18.1",
+		"highlight.js": "^10.3.2",
 		"simple-markdown": "^0.7.2"
 	},
 	"devDependencies": {
