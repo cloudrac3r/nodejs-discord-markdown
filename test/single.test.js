@@ -50,17 +50,12 @@ test('Converts links to <a> links', () => {
 
 test('Fence normal code blocks', () => {
 	expect(markdown.toHTML('text\n```\ncode\nblock\n```\nmore text'))
-		.toBe('text<br><pre><code class="hljs">code\nblock</code></pre><br>more text');
-});
-
-test('Fenced code blocks with hljs', () => {
-	expect(markdown.toHTML('```js\nconst one = 1;\nconsole.log(one);\n```'))
-		.toBe('<pre><code class="hljs js"><span class="hljs-keyword">const</span> one = <span class="hljs-number">1</span>;\n<span class="hljs-built_in">console</span>.log(one);</code></pre>');
+		.toBe('text<br><pre><code>code\nblock</code></pre><br>more text');
 });
 
 test('Fenced code blocks on one line', () => {
 	expect(markdown.toHTML('`test`\n\n```test```'))
-		.toBe('<code>test</code><br><br><pre><code class="hljs">test</code></pre>');
+		.toBe('<code>test</code><br><br><pre><code>test</code></pre>');
 });
 
 test('Escaped marks', () => {
@@ -85,7 +80,7 @@ test('Block quotes', () => {
 	expect(markdown.toHTML('outside\n>>> inside\ntext\n> here\ndoes not end'))
 		.toBe('outside<br><blockquote>inside<br>text<br>&gt; here<br>does not end</blockquote>');
 	expect(markdown.toHTML('>>> test\n```js\ncode```'))
-		.toBe('<blockquote>test<br><pre><code class="hljs js">code</code></pre></blockquote>');
+		.toBe('<blockquote>test<br><pre><code>code</code></pre></blockquote>');
 	expect(markdown.toHTML('> text\n> \n> here'))
 		.toBe('<blockquote>text<br><br>here</blockquote>');
 	expect(markdown.toHTML('text\n\n> Lorem ipsum\n>> Lorem ipsum\n> Lorem ipsum\n> > Lorem ipsum\n> Lorem ipsum\n\nLorem ipsum\n\n> Lorem ipsum\n\nLorem ipsum\n\n>>> text\ntext\ntext\n'))
@@ -110,9 +105,7 @@ test('escape html', () => {
 	expect(markdown.toHTML('<b>test</b>'))
 		.toBe('&lt;b&gt;test&lt;/b&gt;');
 	expect(markdown.toHTML('```\n\n<b>test</b>\n```'))
-		.toBe('<pre><code class="hljs">&lt;b&gt;test&lt;/b&gt;</code></pre>');
-	expect(markdown.toHTML('```html\n\n<b>test</b>\n```'))
-		.toBe('<pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">b</span>&gt;</span>test<span class="hljs-tag">&lt;/<span class="hljs-name">b</span>&gt;</span></code></pre>');
+		.toBe('<pre><code>&lt;b&gt;test&lt;/b&gt;</code></pre>');
 });
 
 test('don\'t escape html if set', () => {

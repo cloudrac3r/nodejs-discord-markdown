@@ -35,19 +35,6 @@ test('no undserscore italic in one word', () => {
 		.toBe('test_ing_stuff');
 });
 
-test('Codeblocks should work with ini', () => {
-	expect(markdown.toHTML('```ini\n[01] asdasd\n```'))
-		.toContain('hljs ini');
-});
-
-test('Codeblocks should work with css modules', () => {
-	expect(markdown.toHTML('```ini\n;asdasada\n[01] asdasd\n```', {
-		cssModuleNames: {
-			'hljs-section': 'testing'
-		}
-	})).toContain('<span class="testing">[01]</span>');
-});
-
 test('Spoiler edge-cases', () => {
 	expect(markdown.toHTML('||||'))
 		.toBe('||||');
