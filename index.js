@@ -201,11 +201,20 @@ const rulesDiscord = {
 			};
 		},
 		html: function(node, output, state) {
-			return htmlTag('img', '', {
-				class: `d-emoji${node.animated ? ' d-emoji-animated' : ''}`,
-				src: `https://cdn.discordapp.com/emojis/${node.id}.${node.animated ? 'gif' : 'png'}`,
-				alt: `:${node.name}:`
-			}, false, state);
+			if (state.discordCallback && state.discordCallback.emoji) {
+				// allow matrix to deal with this further
+				return htmlTag('span', state.discordCallback.emoji(node), { class: [
+					'd-emoji',
+					node.animated ? ' d-emoji-animated' : ''
+				].join(" ") }, state);
+			} else {
+				// standard image rendering
+				return htmlTag('img', '', {
+					class: `d-emoji${node.animated ? ' d-emoji-animated' : ''}`,
+					src: `https://cdn.discordapp.com/emojis/${node.id}.${node.animated ? 'gif' : 'png'}`,
+					alt: `:${node.name}:`
+				}, false, state);
+			}
 		}
 	},
 	discordEveryone: {
