@@ -140,7 +140,7 @@ const rules = {
 			};
 		},
 		html: function(node, output, state) {
-			return htmlTag('span', output(node.content, state), { class: 'd-spoiler', 'data-mx-spoiler': '' }, state)
+			return htmlTag('span', output(node.content, state), { 'data-mx-spoiler': '' }, state)
 		}
 	}
 };
@@ -163,7 +163,7 @@ const rulesDiscord = {
 			};
 		},
 		html: function(node, output, state) {
-			return htmlTag('span', state.discordCallback.user(node), { class: 'd-mention d-user' }, state);
+			return state.discordCallback.user(node)
 		}
 	},
 	discordChannel: {
@@ -175,7 +175,7 @@ const rulesDiscord = {
 			};
 		},
 		html: function(node, output, state) {
-			return htmlTag('span', state.discordCallback.channel(node), { class: 'd-mention d-channel' }, state);
+			return state.discordCallback.channel(node)
 		}
 	},
 	discordRole: {
@@ -187,7 +187,7 @@ const rulesDiscord = {
 			};
 		},
 		html: function(node, output, state) {
-			return htmlTag('span', state.discordCallback.role(node), { class: 'd-mention d-role' }, state);
+			return hstate.discordCallback.role(node)
 		}
 	},
 	discordEmoji: {
@@ -224,7 +224,7 @@ const rulesDiscord = {
 			return { };
 		},
 		html: function(node, output, state) {
-			return htmlTag('span', state.discordCallback.everyone(node), { class: 'd-mention d-user' }, state);
+			return state.discordCallback.everyone(node)
 		}
 	},
 	discordHere: {
@@ -234,7 +234,7 @@ const rulesDiscord = {
 			return { };
 		},
 		html: function(node, output, state) {
-			return htmlTag('span', state.discordCallback.here(node), { class: 'd-mention d-user' }, state);
+			return state.discordCallback.here(node)
 		}
 	}
 };
