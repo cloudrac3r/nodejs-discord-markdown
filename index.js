@@ -9,9 +9,6 @@ function htmlTag(tagName, content, attributes, isClosed = true, state = { }) {
 	if (!attributes)
 		attributes = { };
 
-	if (attributes.class && state.cssModuleNames)
-		attributes.class = attributes.class.split(' ').map(cl => state.cssModuleNames[cl] || cl).join(' ');
-
 	let attributeString = '';
 	for (let attr in attributes) {
 		// Removes falsy attributes
@@ -187,7 +184,7 @@ const rulesDiscord = {
 			};
 		},
 		html: function(node, output, state) {
-			return hstate.discordCallback.role(node)
+			return state.discordCallback.role(node)
 		}
 	},
 	discordEmoji: {
@@ -203,10 +200,7 @@ const rulesDiscord = {
 		html: function(node, output, state) {
 			if (state.discordCallback && state.discordCallback.emoji) {
 				// allow matrix to deal with this further
-				return htmlTag('span', state.discordCallback.emoji(node), { class: [
-					'd-emoji',
-					node.animated ? ' d-emoji-animated' : ''
-				].join(" ") }, state);
+				return state.discordCallback.emoji(node)
 			} else {
 				// standard image rendering
 				return htmlTag('img', '', {
@@ -272,7 +266,7 @@ const htmlOutputEmbed = markdown.htmlFor(markdown.ruleOutput(rulesEmbed, 'html')
  * @param {Boolean} [options.escapeHTML=true] Escape HTML in the output
  * @param {Boolean} [options.discordOnly=false] Only parse Discord-specific stuff (such as mentions)
  * @param {Object} [options.discordCallback] Provide custom handling for mentions and emojis
- * @param {Object} [options.cssModuleNames] An object mapping css classes to css module classes
+ * @returns {string}
  */
 function toHTML(source, options, customParser, customHtmlOutput) {
 	if ((customParser || customHtmlOutput) && (!customParser || !customHtmlOutput))
@@ -303,7 +297,6 @@ function toHTML(source, options, customParser, customHtmlOutput) {
 		inQuote: false,
 		inEmphasis: false,
 		escapeHTML: options.escapeHTML,
-		cssModuleNames: options.cssModuleNames || null,
 		discordCallback: Object.assign({ }, discordCallbackDefaults, options.discordCallback)
 	};
 

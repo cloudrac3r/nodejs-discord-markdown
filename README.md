@@ -37,7 +37,6 @@ toHTML('This **is** a __test__', options);
   * `role`: (`id`: Number) Role mentions "@somerole"
   * `everyone`: () Everyone mention "@everyone"
   * `here`: () Here mention "@here"
-* `cssModuleNames`: Object, maps CSS class names to CSS module class names
 
 ### Mention and Emoji Handling
 
