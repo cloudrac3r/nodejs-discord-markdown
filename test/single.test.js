@@ -108,6 +108,12 @@ test('escape html', () => {
 		.toBe('<pre><code>&lt;b&gt;test&lt;/b&gt;</code></pre>');
 });
 
+
+test('don\'t escape too many characters', () => {
+	expect(markdown.toHTML('& then he said, **"you & her can\'t do that!"**'))
+		.toBe('&amp; then he said, <strong>"you &amp; her can\'t do that!"</strong>');
+});
+
 test('don\'t escape html if set', () => {
 	expect(markdown.toHTML('<b>test</b>', { escapeHTML: false }))
 		.toBe('<b>test</b>');

@@ -1,5 +1,24 @@
 const markdown = require('simple-markdown');
 
+var SANITIZE_TEXT_R = /[<>&]/g;
+/** @type {any} */
+var SANITIZE_TEXT_CODES = {
+    '<': '&lt;',
+	 '>': '&gt;',
+    '&': '&amp;',
+};
+/**
+ * Only safe to use for text that will be displayed inside elements, not in its attributes or other contexts!
+ * Otherwise, use markdown.sanitizeText.
+ * @param {SimpleMarkdown.Attr} text
+ * @returns {string}
+ */
+var sanitizeTextNonAttribute = function(text /* : Attr */) {
+    return String(text).replace(SANITIZE_TEXT_R, function(chr) {
+        return SANITIZE_TEXT_CODES[chr];
+    });
+};
+
 function htmlTag(tagName, content, attributes, isClosed = true, state = { }) {
 	if (typeof isClosed === 'object') {
 		state = isClosed;
@@ -52,7 +71,7 @@ const rules = {
 		},
 		html: (node, output, state) => {
 			return htmlTag('pre', htmlTag(
-				'code', markdown.sanitizeText(node.content), {}, state
+				'code', sanitizeTextNonAttribute(node.content), {}, state
 			), null, state);
 		}
 	}),
@@ -100,14 +119,14 @@ const rules = {
 	inlineCode: Object.assign({ }, markdown.defaultRules.inlineCode, {
 		match: source => markdown.defaultRules.inlineCode.match.regex.exec(source),
 		html: function(node, output, state) {
-			return htmlTag('code', markdown.sanitizeText(node.content.trim()), null, state);
+			return htmlTag('code', sanitizeTextNonAttribute(node.content.trim()), null, state);
 		}
 	}),
 	text: Object.assign({ }, markdown.defaultRules.text, {
 		match: source => /^[\s\S]+?(?=[^0-9A-Za-z\s\u00c0-\uffff-]|\n\n|\n|\w+:\S|$)/.exec(source),
 		html: function(node, output, state) {
 			if (state.escapeHTML)
-				return markdown.sanitizeText(node.content);
+				return sanitizeTextNonAttribute(node.content);
 
 			return node.content;
 		}
@@ -143,9 +162,9 @@ const rules = {
 };
 
 const discordCallbackDefaults = {
-	user: node => '@' + markdown.sanitizeText(node.id),
-	channel: node => '#' + markdown.sanitizeText(node.id),
-	role: node => '&' + markdown.sanitizeText(node.id),
+	user: node => '@' + sanitizeTextNonAttribute(node.id),
+	channel: node => '#' + sanitizeTextNonAttribute(node.id),
+	role: node => '&' + sanitizeTextNonAttribute(node.id),
 	everyone: () => '@everyone',
 	here: () => '@here'
 };
@@ -240,7 +259,7 @@ const rulesDiscordOnly = Object.assign({ }, rulesDiscord, {
 		match: source => /^[\s\S]+?(?=[^0-9A-Za-z\s\u00c0-\uffff-]|\n\n|\n|\w+:\S|$)/.exec(source),
 		html: function(node, output, state) {
 			if (state.escapeHTML)
-				return markdown.sanitizeText(node.content);
+				return sanitizeTextNonAttribute(node.content);
 
 			return node.content;
 		}
