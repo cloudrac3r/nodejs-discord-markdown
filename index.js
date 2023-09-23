@@ -77,6 +77,7 @@ const rules = {
 	}),
 	newline: markdown.defaultRules.newline,
 	escape: markdown.defaultRules.escape,
+	link: markdown.defaultRules.link,
 	autolink: Object.assign({ }, markdown.defaultRules.autolink, {
 		parse: capture => {
 			return {
@@ -266,22 +267,15 @@ const rulesDiscordOnly = Object.assign({ }, rulesDiscord, {
 	})
 });
 
-const rulesEmbed = Object.assign({ }, rules, {
-	link: markdown.defaultRules.link
-});
-
 const parser = markdown.parserFor(rules);
 const htmlOutput = markdown.htmlFor(markdown.ruleOutput(rules, 'html'));
 const parserDiscord = markdown.parserFor(rulesDiscordOnly);
 const htmlOutputDiscord = markdown.htmlFor(markdown.ruleOutput(rulesDiscordOnly, 'html'));
-const parserEmbed = markdown.parserFor(rulesEmbed);
-const htmlOutputEmbed = markdown.htmlFor(markdown.ruleOutput(rulesEmbed, 'html'));
 
 /**
  * Parse markdown and return the HTML output
  * @param {String} source Source markdown content
  * @param {Object} [options] Options for the parser
- * @param {Boolean} [options.embed=false] Parse as embed content
  * @param {Boolean} [options.escapeHTML=true] Escape HTML in the output
  * @param {Boolean} [options.discordOnly=false] Only parse Discord-specific stuff (such as mentions)
  * @param {Object} [options.discordCallback] Provide custom handling for mentions and emojis
@@ -292,7 +286,6 @@ function toHTML(source, options, customParser, customHtmlOutput) {
 		throw new Error('You must pass both a custom parser and custom htmlOutput function, not just one');
 
 	options = Object.assign({
-		embed: false,
 		escapeHTML: true,
 		discordOnly: false,
 		discordCallback: { }
@@ -306,9 +299,6 @@ function toHTML(source, options, customParser, customHtmlOutput) {
 	} else if (options.discordOnly) {
 		_parser = parserDiscord;
 		_htmlOutput = htmlOutputDiscord;
-	} else if (options.embed) {
-		_parser = parserEmbed;
-		_htmlOutput = htmlOutputEmbed;
 	}
 
 	const state = {
@@ -328,7 +318,6 @@ module.exports = {
 	toHTML,
 	rules,
 	rulesDiscordOnly,
-	rulesEmbed,
 	markdownEngine: markdown,
 	htmlTag
 };

@@ -94,9 +94,9 @@ test('don\'t drop arms', () => {
 		.toBe('¯\\_(ツ)_/¯ <em>test</em> ¯\\_(ツ)_/¯');
 });
 
-test('only embeds have [label](link)', () => {
+test('embeds and messages have [label](link)', () => {
 	expect(markdown.toHTML('[label](http://example.com)'))
-		.toBe('[label](<a href="http://example.com">http://example.com</a>)');
+		.toBe('<a href="http://example.com">label</a>');
 	expect(markdown.toHTML('[label](http://example.com)', { embed: true }))
 		.toBe('<a href="http://example.com">label</a>');
 });
