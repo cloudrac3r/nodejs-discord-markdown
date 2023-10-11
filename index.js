@@ -117,6 +117,30 @@ const rules = {
 	strike: Object.assign({ }, markdown.defaultRules.del, {
 		match: markdown.inlineRegex(/^~~([\s\S]+?)~~(?!_)/),
 	}),
+	heading: {
+		order: markdown.defaultRules.heading.order,
+		match: source => /^ *(#{1,3}) ((?:[^\n])+(?<!(?:# *)))#* *(?:\n *)*/.exec(source),
+		parse: markdown.defaultRules.heading.parse,
+		html: function (node, output, state) {
+            return htmlTag("h" + node.level, output(node.content, state));
+		}
+	},
+	list: {
+		order: markdown.defaultRules.list.order,
+		match: function(source, state) {
+            var prevCaptureStr = state.prevCapture == null ? "" : state.prevCapture[0];
+            var isStartOfLineCapture = /(?:^|\n)( *)$/.exec(prevCaptureStr);
+
+            if (isStartOfLineCapture) {
+                source = isStartOfLineCapture[1] + source;
+                return /^( *)((?:[*+-]|\d+\.)) [\s\S]+?(?:\n{1,}(?! )(?!\1(?:[*+-]|\d+\.) )\n*|\s*\n*$)/.exec(source);
+            } else {
+                return null;
+            }
+        },
+		parse:markdown.defaultRules.list.parse,
+		html: markdown.defaultRules.list.html
+	},
 	inlineCode: Object.assign({ }, markdown.defaultRules.inlineCode, {
 		match: source => markdown.defaultRules.inlineCode.match.regex.exec(source),
 		html: function(node, output, state) {

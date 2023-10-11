@@ -118,3 +118,13 @@ test('don\'t escape html if set', () => {
 	expect(markdown.toHTML('<b>test</b>', { escapeHTML: false }))
 		.toBe('<b>test</b>');
 });
+
+test('support heading', () => {
+	expect(markdown.toHTML('# This is a h1 text!#  \n## This is a h2 text!#  \nMessage'))
+		.toBe('<h1>This is a h1 text!</h1><h2>This is a h2 text!</h2>Message');
+})
+
+test('support list', () => {
+	expect(markdown.toHTML('Message\n- List dash\n - List point\nMessage'))
+		.toBe('Message<br><ul><li>List dash<br><ul><li>List point</li></ul></li></ul>Message');
+})
