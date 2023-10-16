@@ -119,12 +119,17 @@ test('don\'t escape html if set', () => {
 		.toBe('<b>test</b>');
 });
 
-test('support heading', () => {
+test('Supports headings', () => {
 	expect(markdown.toHTML('# This is a h1 text!#  \n## This is a h2 text!#  \nMessage'))
 		.toBe('<h1>This is a h1 text!</h1><h2>This is a h2 text!</h2>Message');
 })
 
-test('support list', () => {
+test('Supports ordered list', () => {
+	expect(markdown.toHTML('Message\n1. List dash\n 2. List point\n 3. Another list point\nMessage'))
+		.toBe('Message<br><ol start="1"><li>List dash<br><ol start="2"><li>List point</li><li>Another list point</li></ol></li></ol>Message');
+})
+
+test('Supports unordered list', () => {
 	expect(markdown.toHTML('Message\n- List dash\n - List point\nMessage'))
 		.toBe('Message<br><ul><li>List dash<br><ul><li>List point</li></ul></li></ul>Message');
 })

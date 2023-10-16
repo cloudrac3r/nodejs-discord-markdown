@@ -119,26 +119,27 @@ const rules = {
 	}),
 	heading: {
 		order: markdown.defaultRules.heading.order,
-		match: source => /^ *(#{1,3}) ((?:[^\n])+(?<!(?:# *)))#* *(?:\n *)*/.exec(source),
+		match: (source, state) => {
+			if (state.prevCapture && !state.prevCapture[0].endsWith("\n")) return null; // Make sure it's at the start of a line
+			return /^(#{1,3}) +([^#\n].*?)#* *(?:\n *)*(?:\n|$)/.exec(source)
+		},
 		parse: markdown.defaultRules.heading.parse,
-		html: function (node, output, state) {
-            return htmlTag("h" + node.level, output(node.content, state));
-		}
+		html: markdown.defaultRules.heading.html
 	},
 	list: {
 		order: markdown.defaultRules.list.order,
-		match: function(source, state) {
-            var prevCaptureStr = state.prevCapture == null ? "" : state.prevCapture[0];
-            var isStartOfLineCapture = /(?:^|\n)( *)$/.exec(prevCaptureStr);
+		match: (source, state) => {
+			var prevCaptureStr = state.prevCapture == null ? "" : state.prevCapture[0];
+			var isStartOfLineCapture = /(?:^|\n)( *)$/.exec(prevCaptureStr);
 
-            if (isStartOfLineCapture) {
-                source = isStartOfLineCapture[1] + source;
-                return /^( *)((?:[*+-]|\d+\.)) [\s\S]+?(?:\n{1,}(?! )(?!\1(?:[*+-]|\d+\.) )\n*|\s*\n*$)/.exec(source);
-            } else {
-                return null;
-            }
-        },
-		parse:markdown.defaultRules.list.parse,
+			if (isStartOfLineCapture) {
+				source = isStartOfLineCapture[1] + source;
+				return /^( *)((?:[*+-]|\d+\.)) [\s\S]+?(?:\n{1,}(?! )(?!\1(?:[*+-]|\d+\.) )\n*|\s*\n*$)/.exec(source);
+			} else {
+				return null;
+			}
+		},
+		parse: markdown.defaultRules.list.parse,
 		html: markdown.defaultRules.list.html
 	},
 	inlineCode: Object.assign({ }, markdown.defaultRules.inlineCode, {
