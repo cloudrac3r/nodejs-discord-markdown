@@ -134,7 +134,7 @@ const rules = {
 
 			if (isStartOfLineCapture) {
 				source = isStartOfLineCapture[1] + source;
-				return /^( *)((?:[*+-]|\d+\.)) [\s\S]+?(?:\n{1,}(?! )(?!\1(?:[*+-]|\d+\.) )\n*|\s*\n*$)/.exec(source);
+				return /^( *)((?:[*-]|\d+\.)) [\s\S]+?(?:\n{1,}(?! )(?!\1(?:[*-]|\d+\.) )\n*|\s*\n*$)/.exec(source);
 			} else {
 				return null;
 			}
